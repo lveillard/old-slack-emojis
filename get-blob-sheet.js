@@ -2,41 +2,49 @@ const request = require('request');
 const _ = require('lodash')
 
 const cheerio = require('cheerio');
-//const $ = ;
 
+const fs = require('fs');
 
-const fetchPage = ()=>{
+const fetchPage = async ()=>{
 	return new Promise((resolve, reject)=>{
 		request('https://emojipedia.org/google/android-6.0.1', (err, res, body)=>{
 			if(err) return reject(err);
-			return resolve(body)
+			console.log('Fetched page');
+			return resolve(body);
 		})
 	})
+};
+
+const parseEmojis = (page)=>{
+	const $ = cheerio.load(page);
+	const emojis = Array.prototype.slice.call($('ul.emoji-grid li img'));
+	return emojis.map((emoji)=>{
+		const src = emoji.attribs['data-src'] || emoji.attribs['data-cfsrc'];
+		return {
+			title : emoji.attribs.title,
+			src,
+			code : src.substring(src.lastIndexOf('_')+1).replace('.png', '').toUpperCase()
+		}
+	});
+};
+
+const EmojiData = require('./iamcal-emoji-data.json');
+const addSheetPos = (emojis)=>{
+	return emojis.map((emoji)=>{
+		const data = EmojiData.find((ed)=>(ed.unified == emoji.code || ed.non_qualified == emoji.code));
+		if(data) emoji.sheet = {x : data.sheet_x, y : data.sheet_y}
+		return emoji;
+	});
+};
+
+const run = async ()=>{
+	//const page = await fetchPage();
+	const page = fs.readFileSync('./emojipage.html', 'utf8');
+	let emojis = parseEmojis(page);
+	emojis = addSheetPos(emojis);
+
+	fs.writeFileSync('./temp.json', JSON.stringify(emojis, null, '\t'), 'utf8');
+
 }
 
-
-fetchPage()
-	.then((page)=>cheerio.load(page))
-	.then(($)=>{
-		let emojis = $('ul.emoji-grid li img')
-		console.log(emojis[0].attribs);
-		console.log(emojis[1].attribs);
-		console.log(_.last);
-
-		return _.reduce(emojis, (acc, emoji)=>{
-			//console.log(emoji);
-			if(emoji.attribs['data-src']) acc[emoji.attribs.title] = emoji.attribs['data-src']
-			//acc[emoji.attribs.title] = emoji.attribs.srcset
-			return acc;
-		}, {})
-	})
-	.then((emojis)=>{
-		console.log(emojis);
-	})
-
-
-// const fetch = async ()=>{
-
-// };
-
-// fetch().then((page)=>console.log(page))
+run();
