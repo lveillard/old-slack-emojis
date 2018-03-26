@@ -34,7 +34,12 @@ const downloadImages = async (url, dir)=>{
 	console.log('Downloading Images', Object.keys(emojis).length);
 	const download = async (url, dest)=>{
 		return new Promise((resolve, reject)=>{
-			request(url).pipe(fs.createWriteStream(dest)).on('finish', resolve)
+			request(url).pipe(fs.createWriteStream(dest)).on('finish', ()=>{
+				gm(dest)
+					.gravity('Center')
+					.resize(64, 64)
+					.write(dest, (err)=>err?reject(err):resolve());
+			})
 		});
 	};
 
@@ -89,8 +94,20 @@ const sanatizeEmojiData = (blobs, fallback)=>{
 };
 
 const run = async ()=>{
-	const blobs = await downloadImages('https://emojipedia.org/google/android-6.0.1', 'temp_imgs/blobs');
-	const fallback = await downloadImages('https://emojipedia.org/google/android-8.1/', 'temp_imgs/google');
+	try{
+		let blobs = require('./temp_imgs/blobs');
+		console.log('Loaded Blobs');
+	}catch(err){
+		blobs = await downloadImages('https://emojipedia.org/google/android-6.0.1', 'temp_imgs/blobs');
+		fs.outputJsonSync('temp_imgs/blobs/index.js', blobs, {spaces : 2});
+	}
+	try{
+		let fallback = require('./temp_imgs/google');
+		console.log('Loaded fallback');
+	}catch(err){
+		fallback = await downloadImages('https://emojipedia.org/google/android-8.1/', 'temp_imgs/google');
+		fs.outputJsonSync('temp_imgs/google/index.js', fallback, {spaces : 2});
+	}
 	const data = _.filter(sanatizeEmojiData(blobs, fallback));
 	await makeSheet(data);
 	console.log('done');
