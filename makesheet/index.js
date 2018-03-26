@@ -56,7 +56,7 @@ const makeSheet = (EmojiList)=>{
 	const compose = (emojis, idx)=>{
 		console.log('composing', `${idx}/${chunks.length-1}`);
 		return new Promise((resolve, reject)=>{
-			let cmd = gm()
+			let cmd = gm(3328, 3328)
 				.in("-background")
 				.in('none')
 			if(idx != 0) cmd.in('-page', '+0+0').in(finalPath);
@@ -94,19 +94,20 @@ const sanatizeEmojiData = (blobs, fallback)=>{
 };
 
 const run = async ()=>{
+	let blobs, fallback
 	try{
-		let blobs = require('./temp_imgs/blobs');
-		console.log('Loaded Blobs');
+		blobs = require('./temp_imgs/blobs');
+		console.log('Loaded Blobs',);
 	}catch(err){
 		blobs = await downloadImages('https://emojipedia.org/google/android-6.0.1', 'temp_imgs/blobs');
-		fs.outputJsonSync('temp_imgs/blobs/index.js', blobs, {spaces : 2});
+		fs.outputJsonSync('temp_imgs/blobs/index.json', blobs, {spaces : 2});
 	}
 	try{
-		let fallback = require('./temp_imgs/google');
+		fallback = require('./temp_imgs/google');
 		console.log('Loaded fallback');
 	}catch(err){
 		fallback = await downloadImages('https://emojipedia.org/google/android-8.1/', 'temp_imgs/google');
-		fs.outputJsonSync('temp_imgs/google/index.js', fallback, {spaces : 2});
+		fs.outputJsonSync('temp_imgs/google/index.json', fallback, {spaces : 2});
 	}
 	const data = _.filter(sanatizeEmojiData(blobs, fallback));
 	await makeSheet(data);
