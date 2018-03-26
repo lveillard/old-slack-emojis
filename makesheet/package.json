@@ -1,0 +1,26 @@
+{
+  "name": "old-slack-emojis",
+  "version": "1.0.0",
+  "description": "Bring back old emojis to new Slack!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stolksdorf/old-slack-emojis.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stolksdorf/old-slack-emojis/issues"
+  },
+  "homepage": "https://github.com/stolksdorf/old-slack-emojis#readme",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "fs-extra": "^5.0.0",
+    "gm": "^1.23.1",
+    "lodash": "^4.17.5",
+    "request": "^2.85.0"
+  }
+}
