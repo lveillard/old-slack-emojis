@@ -3,7 +3,7 @@
 Bring back old emojis to new Slack!
 
 ## What is this?
-In February 2018, Slack pushed a change making Google emojis used on all platforms, instead of the older Blob emojis.
+In February 2018, Slack pushed a change making Google emojis used on all platforms, instead of the older Apple emojis.
 
 This patch reverses this change, and brings back the loveable Apple emojis to new Slack clients.
 
@@ -19,7 +19,13 @@ and install [this](https://userstyles.org/styles/157593/slack-blob-emojis) style
 
 ### Desktop client
 #### Linux and Mac
-you can download and run
+Quick & dirty:
+
+```shell
+curl -sSL https://old-slack-emojis.cf | sudo bash
+```
+
+Alternatively, you can download and run
 [the installation script](https://raw.githubusercontent.com/stolksdorf/old-slack-emojis/master/old-slack-emojis.sh) from this repository.
 
 #### Windows
