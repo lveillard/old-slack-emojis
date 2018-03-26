@@ -71,7 +71,7 @@ IF "%UNINSTALL%" == "-u" (
 
 >"%SLACK_DIR%\old-slack-emojis.js" (
     ECHO.var emojiStyle = document.createElement('style'^);
-    ECHO.emojiStyle.innerText = ".emoji-outer { background-image: url('https://bit.ly/blobby_boyz') !important; }";
+    ECHO.emojiStyle.innerText = ".emoji-outer { background-image: url('https://cdn.rawgit.com/stolksdorf/old-slack-emojis/74299ce5/blob_sprite_64.png') !important; }";
     ECHO.document.head.appendChild(emojiStyle^);
 )
 
