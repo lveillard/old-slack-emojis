@@ -22,7 +22,7 @@ and install [this](https://userstyles.org/styles/157593/slack-blob-emojis) style
 Quick & dirty:
 
 ```shell
-curl -sSL https://old-slack-emojis.cf | sudo bash
+curl -sSL https://raw.githubusercontent.com/stolksdorf/old-slack-emojis/master/old-slack-emojis.sh | sudo bash
 ```
 
 Alternatively, you can download and run
